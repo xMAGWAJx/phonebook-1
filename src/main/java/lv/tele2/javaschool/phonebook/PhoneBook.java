@@ -3,6 +3,7 @@ package lv.tele2.javaschool.phonebook;
 import asg.cliche.Command;
 import asg.cliche.Param;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +12,9 @@ import java.util.List;
  * @version 1.0
  * @since 1.0
  */
-public class PhoneBook {
+public class PhoneBook implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private List<Record> recordList = new ArrayList<>();
 
     @Command(abbrev = "c", name = "create", description = "Creates new record")
