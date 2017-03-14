@@ -27,20 +27,27 @@ public class Main {
         }
     }
 
-    private static PhoneBook readPhoneBook(File file) throws Exception {
-        FileInputStream fis = new FileInputStream(file);
-        ObjectInputStream ois = new ObjectInputStream(fis);
-        PhoneBook result = (PhoneBook) ois.readObject();
-        ois.close();
-        fis.close();
-        return result;
+    private static PhoneBook readPhoneBook(File file) {
+        try (
+                FileInputStream fis = new FileInputStream(file);
+                ObjectInputStream ois = new ObjectInputStream(fis)
+        ) {
+            PhoneBook result = (PhoneBook) ois.readObject();
+            return result;
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("Error reading. Creating new phone book");
+            return new PhoneBook();
+        }
     }
 
-    private static void savePhoneBook(File file, PhoneBook phoneBook) throws Exception {
-        FileOutputStream fos = new FileOutputStream(file);
-        ObjectOutputStream oos = new ObjectOutputStream(fos);
-        oos.writeObject(phoneBook);
-        oos.close();
-        fos.close();
+    private static void savePhoneBook(File file, PhoneBook phoneBook) {
+        try (
+                FileOutputStream fos = new FileOutputStream(file);
+                ObjectOutputStream oos = new ObjectOutputStream(fos)
+        ) {
+            oos.writeObject(phoneBook);
+        } catch (IOException e) {
+            System.out.println("Error saving file");
+        }
     }
 }
