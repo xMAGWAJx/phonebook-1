@@ -2,6 +2,7 @@ package lv.tele2.javaschool.phonebook;
 
 import asg.cliche.Command;
 import asg.cliche.Param;
+import com.sun.org.apache.regexp.internal.RE;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
@@ -9,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
@@ -26,35 +28,31 @@ public class PhoneBook implements Serializable {
     @Command(abbrev = "c", name = "create", description = "Creates new record")
     public void create(
             @Param(name = "name", description = "Record's name") String name,
-            @Param(name = "phone", description = "Phone number") String... phones) {
+            @Param(name = "phone", description = "Phone number") String... phones)
+    throws SQLException {
         Record r = new Record(name, phones);
-        recordList.add(r);
+       r.save();
     }
 
     @Command(abbrev = "l", name = "list", description = "Lists all records")
-    public List<Record> list() {
-        return recordList;
+    public List<Record> list() throws SQLException {
+        return Record.findAll();
     }
 
     @Command
     public void remove(int id, String name) {
-        for (Record r : recordList) {
-            if (r.getId() == id && r.getName().equals(name)) {
-                recordList.remove(r);
-                break;
-            }
-        }
+        //TODO implement it later
     }
 
     @Command
-    public void generate(int count) {
+    public void generate(int count) throws SQLException {
         for (int i = 0; i < count; i++) {
             generate();
         }
     }
 
     @Command
-    public void generate() {
+    public void generate() throws SQLException {
         JSONObject obj = callNameFake();
         System.out.println(obj.getString("name"));
         System.out.println(obj.getInt("bonus"));
